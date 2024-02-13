@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QMediaPlayer>
+#include <QMediaPlaylist>
+#include <QStandardItemModel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -33,7 +35,9 @@ private slots:
     void on_horizontalSliderProgress_sliderMoved(int position);
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow *ui; // pointer, потому что все должно находиться в динам. памяти
     QMediaPlayer* m_player;
+    QMediaPlaylist* m_playlist;
+    QStandardItemModel* m_playlist_model;
 };
 #endif // MAINWINDOW_H

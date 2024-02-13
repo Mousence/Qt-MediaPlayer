@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>560</width>
-    <height>240</height>
+    <width>476</width>
+    <height>410</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -180,13 +180,23 @@
      <string>Progress:</string>
     </property>
    </widget>
+   <widget class="QTableView" name="tableViewPlaylist">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>180</y>
+      <width>431</width>
+      <height>192</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>560</width>
+     <width>476</width>
      <height>20</height>
     </rect>
    </property>
