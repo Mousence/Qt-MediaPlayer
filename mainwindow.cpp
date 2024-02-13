@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QStyle>
+#include <QTime>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -20,7 +21,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->labelVolume->setText(QString("Volume: ").append(QString::number(m_player->volume())));
     ui->horizontaSliderlVolume->setValue(m_player->volume());
 
-    ui->horizontalSliderProgress->setValue(m_player->position() / (m_player->duration()/1000));
+    connect(m_player, &QMediaPlayer::durationChanged, this, &MainWindow::on_duration_changed);
+    connect(m_player, &QMediaPlayer::positionChanged, this, &MainWindow::on_position_changed);
 }
 
 MainWindow::~MainWindow()
@@ -29,6 +31,19 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::on_duration_changed(quint64 duration)
+{
+    this->ui->horizontalSliderProgress->setMaximum(duration);
+    QTime q_time = QTime::fromMSecsSinceStartOfDay(duration);
+    ui->labelDuration->setText(QString("Duration: ").append(q_time.toString("hh:mm:ss")));
+}
+
+void MainWindow::on_position_changed(quint64 position)
+{
+    QTime q_time = QTime::fromMSecsSinceStartOfDay(position);
+    this->ui->labelProgress->setText(QString(q_time.toString("hh:mm:ss")));
+    this->ui->horizontalSliderProgress->setSliderPosition(position);
+}
 
 void MainWindow::on_pushButtonOpen_clicked()
 {
@@ -40,7 +55,7 @@ void MainWindow::on_pushButtonOpen_clicked()
     this->ui->labelFile->setText(file);
     this->setWindowTitle("Media Player - " + file.split('/').last());
     this->m_player->setMedia(QUrl::fromLocalFile(file));
-    this->ui->labelDuration->setText(QString("Duration: ").append(QString::number(m_player->duration())));
+    //this->ui->labelDuration->setText(QString("Duration: ").append(QString::number(m_player->duration())));
 }
 
 
@@ -59,5 +74,11 @@ void MainWindow::on_pushButtonPlay_clicked()
 void MainWindow::on_pushButtonPause_clicked()
 {
     m_player->pause();
+}
+
+
+void MainWindow::on_horizontalSliderProgress_sliderMoved(int position)
+{
+    this->m_player->setPosition(position);
 }
 

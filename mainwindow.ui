@@ -157,9 +157,9 @@
    <widget class="QLabel" name="labelDuration">
     <property name="geometry">
      <rect>
-      <x>386</x>
-      <y>120</y>
-      <width>61</width>
+      <x>330</x>
+      <y>160</y>
+      <width>121</width>
       <height>20</height>
      </rect>
     </property>
