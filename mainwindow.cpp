@@ -2,6 +2,29 @@
 #include "ui_mainwindow.h"
 #include <QStyle>
 #include <QTime>
+/*#include <QStyledItemDelegate>
+#include <QPainter>
+#include <QModelIndex>
+#include <QFontMetrics>
+#include <QTableView>
+
+class PlaylistDelegate : public QStyledItemDelegate {
+public:
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override {
+        QStyledItemDelegate::paint(painter, option, index);
+
+        if (option.state & QStyle::State_Selected) {
+            QRect rect = option.rect;
+            QFontMetrics metrics(option.font);
+            QString text = index.data().toString();
+            int textWidth = metrics.width(text);
+            int textHeight = metrics.height();
+            painter->setPen(Qt::blue);
+            painter->drawLine(rect.left(), rect.top() + textHeight + 2, rect.left() + textWidth, rect.top() + textHeight + 2);
+        }
+    }
+}; */
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -9,12 +32,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    ui->pushButtonMute->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
     ui->pushButtonOpen->setIcon(style()->standardIcon(QStyle::SP_DriveDVDIcon));
     ui->pushButtonPrev->setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
     ui->pushButtonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     ui->pushButtonStop->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
     ui->pushButtonPause->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
     ui->pushButtonNext->setIcon(style()->standardIcon(QStyle::SP_MediaSkipForward));
+    ui->pushButtonMute->setCheckable(1); ////////////////////////////////////////////
 
     //                     Player Init:
     m_player = new QMediaPlayer(this);
@@ -39,6 +64,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(this->ui->pushButtonPrev, &QPushButton::clicked, this->m_playlist, &QMediaPlaylist::previous);
     connect(this->ui->pushButtonNext, &QPushButton::clicked, this->m_playlist, &QMediaPlaylist::next);
+    connect(this->ui->tableViewPlaylist, &QTableView::doubleClicked, [this](const QModelIndex &index){
+            m_playlist->setCurrentIndex(index.row()); m_player->play();
+    });
+    connect(m_playlist, &QMediaPlaylist::currentIndexChanged, [this](int index){
+            ui->labelFile->setText(m_playlist_model->data(m_playlist_model->index(index, 0)).toString());
+    });
+
+    //ui->tableViewPlaylist->setItemDelegate(new PlaylistDelegate);
 }
 
 MainWindow::~MainWindow()
@@ -94,6 +127,7 @@ void MainWindow::on_horizontaSliderlVolume_valueChanged(int value)
 {
     m_player->setVolume(value);
     ui->labelVolume->setText(QString("Volume: ").append(QString::number(value)));
+    ui->pushButtonMute->setIcon(style()->standardIcon(QStyle::SP_MediaVolume)); m_player->setMuted(0);
 }
 
 
@@ -113,3 +147,15 @@ void MainWindow::on_horizontalSliderProgress_sliderMoved(int position)
     this->m_player->setPosition(position);
 }
 
+
+void MainWindow::on_pushButtonMute_clicked(bool checked)
+{
+    if(checked){
+        ui->pushButtonMute->setIcon(style()->standardIcon(QStyle::SP_MediaVolumeMuted));
+        ui->labelVolume->setText(QString("Volume: 0")); m_player->setMuted(1); ui->pushButtonMute->setChecked(1);
+    }
+    else{
+        ui->labelVolume->setText(QString("Volume: ").append(QString::number(m_player->volume())));
+        m_player->setMuted(0); ui->pushButtonMute->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+    }
+}

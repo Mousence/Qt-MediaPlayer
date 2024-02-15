@@ -34,6 +34,8 @@ private slots:
 
     void on_horizontalSliderProgress_sliderMoved(int position);
 
+    void on_pushButtonMute_clicked(bool checked);
+
 private:
     Ui::MainWindow *ui; // pointer, потому что все должно находиться в динам. памяти
     QMediaPlayer* m_player;
