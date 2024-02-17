@@ -19,7 +19,17 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void setPlaybackMode();
+    void savePlaylist(QString filename);
+    void loadPlaylist(QString filename);
+
 private slots:
+      // Функция отклика контекстного меню
+    void slotContextMenu(QPoint pos);
+
+    void onDeleteButtonClicked();
+    void onDeleteAllButtonClicked();
+
     void on_duration_changed(quint64 duration);
 
     void on_position_changed(quint64 position);
@@ -36,10 +46,17 @@ private slots:
 
     void on_pushButtonMute_clicked(bool checked);
 
+    void on_checkBox_stateChanged(int arg1);
+
+    void on_checkBoxShuffle_stateChanged(int arg1);
+
 private:
     Ui::MainWindow *ui; // pointer, потому что все должно находиться в динам. памяти
+    QMenu* popMenu;
     QMediaPlayer* m_player;
     QMediaPlaylist* m_playlist;
     QStandardItemModel* m_playlist_model;
+
+    const QString DEFAULT_PLAYLIST_LOCATION = "C:\\Users\\79141\\Qt sourse\\repos\\MediaPlayer\\";
 };
 #endif // MAINWINDOW_H
