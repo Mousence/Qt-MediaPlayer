@@ -21,8 +21,9 @@ public:
 
     void setPlaybackMode();
     void savePlaylist(QString filename);
+    void loadFileToPlaylist(QString filePath);
     void loadPlaylist(QString filename);
-
+    QVector<QString> loadPlaylistToArray(QString filename);
 private slots:
       // Функция отклика контекстного меню
     void slotContextMenu(QPoint pos);

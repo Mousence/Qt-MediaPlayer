@@ -122,7 +122,7 @@
      <number>100</number>
     </property>
     <property name="value">
-     <number>70</number>
+     <number>35</number>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
@@ -236,6 +236,32 @@
     </property>
     <property name="text">
      <string>Shuffle</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_sampleRate">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>50</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>mHz:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_Bitrate">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>50</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>kbps:</string>
     </property>
    </widget>
   </widget>
